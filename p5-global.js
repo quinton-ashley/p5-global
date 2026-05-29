@@ -3,6 +3,8 @@ window.P2D = 'p2d';
 window.P2D_HDR = 'p2d-hdr';
 window.WEBGPU = 'webgpu';
 window.WEBGL = 'webgl';
+window.windowWidth = 'windowWidth';
+window.windowHeight = 'windowHeight';
 
 window.Canvas = (...args) => {
   return new Promise((resolve) => {
@@ -45,9 +47,25 @@ window.Canvas = (...args) => {
         });
       }
       
-      let r = $.createCanvas(...args);
+      let r = $.createCanvas(....map((arg) => {
+        if (arg == 'windowWidth') return windowWidth;
+        if (arg == 'windowHeight') return windowHeight;
+        return arg;
+      }));
       if (r instanceof Promise) r = await r;
       resolve(r);
     };
   });
 };
+
+const runLifecycleHook = p5.prototype._runLifecycleHook;
+p5.prototype.isFirstDraw = true;
+p5.prototype._runLifecycleHook = async function(hookName) {
+  if (hookName === 'postsetup') {
+    return;
+  } else if (hookName === 'predraw' && this.isFirstDraw) {
+    await runLifecycleHook.call(this, 'postsetup');
+    this.isFirstDraw = false;
+  }
+  return runLifecycleHook.call(this, hookName);
+}
