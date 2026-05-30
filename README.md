@@ -1,16 +1,14 @@
 # p5-global Addon
 
-Run p5.js functions at the file level in a JavaScript module, no async setup function required!
-
-Simply load p5.js v2 and this p5-global addon in your html, then set your sketch.js script's type to "module".
+In your HTML, simply load p5.js v2, this p5-global addon, and set your sketch.js script's type to "module".
 
 ```html
-
+<script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+<script src="https://quinton-ashley.github.io/p5-global/p5-global.js"></script>
+<script type="module" src="sketch.js"></script>
 ```
 
-Then in your sketch.js run `await Canvas()` (rhymes with `createCanvas`).
-
-Congrats! You can now use p5 functions and variables anywhere!
+In sketch.js, run `await Canvas()` (rhymes with `createCanvas`). After that, p5 functions and variables will be available on the file level!
 
 ```js
 await Canvas(500, 500);
@@ -22,3 +20,5 @@ p5.draw = function () {
   circle(mouseX, mouseY, random(5, 50);
 }
 ```
+
+Congrats! You can now enjoy modern JavaScript features, including top-level `await` and `import` statements.
